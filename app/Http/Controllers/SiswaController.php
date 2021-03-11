@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class SiswaController extends Controller
 {
     public function index()
     {
-        $siswa = Siswa::all()->toArray();
+        $siswa = DB::table('siswa')
+                     ->leftJoin('kelas', 'siswa.id_kelas', '=', 'kelas.id')
+                     ->select('siswa.*', 'kelas.nama_kelas')
+                     ->get();
         return $siswa;
     }
 
@@ -48,7 +52,12 @@ class SiswaController extends Controller
 
     public function show($id)
     {
-        $siswa = Siswa::find($id);
+        // $siswa = Siswa::find($id);
+        $siswa = DB::table('siswa')
+                     ->leftJoin('kelas', 'siswa.id_kelas', '=', 'kelas.id')
+                     ->select('siswa.*', 'kelas.nama_kelas')
+                     ->where('siswa.id', '=', $id)
+                     ->get();
         return response()->json($siswa);
     }
 

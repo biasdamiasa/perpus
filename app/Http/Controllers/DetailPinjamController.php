@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\DetailPinjam;
 
@@ -37,7 +38,11 @@ class DetailPinjamController extends Controller
 
     public function show($id_pinjam)
     {
-        $detail = DB::table('detail_pinjam')->where('id_pinjam', $id_pinjam)->get();
+        $detail = DB::table('detail_pinjam')
+                      ->leftJoin('buku', 'detail_pinjam.id_buku', '=', 'buku.id')
+                      ->select('detail_pinjam.*', 'buku.judul')
+                      ->where('detail_pinjam.id_pinjam', '=', $id_pinjam)
+                      ->get();
         
         return response()->json($detail);
     }

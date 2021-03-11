@@ -34,6 +34,7 @@ Route::middleware('api')->group(function () {
     Route::get('/detail/{id_pinjam}', [DetailPinjamController::class, 'show']);
     Route::post('/detail', [DetailPinjamController::class, 'store']);
 
+    Route::get('/kembali', [KembaliController::class, 'index']);    
     Route::post('/kembali', [KembaliController::class, 'store']);    
 
 });

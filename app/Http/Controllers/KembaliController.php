@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Pinjam;
 use App\Models\Kembali;
@@ -12,6 +13,16 @@ use Carbon\Carbon;
 
 class KembaliController extends Controller
 {
+    public function index()
+    {
+        $kembali = DB::table('kembali')->leftJoin('pinjam', 'kembali.id_pinjam' , '=' , 'pinjam.id')
+                                       ->leftJoin('siswa' , 'pinjam.id_siswa' , '=' , 'siswa.id')
+                                       ->select('kembali.*' , 'siswa.nama_siswa')
+                                       ->get();
+                                       
+        return response()->json($kembali);
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
